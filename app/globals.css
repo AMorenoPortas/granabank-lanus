@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --granate: #6B1B2A;
+  --granate-claro: #8B2535;
+  --fondo: #F5F5F5;
+  --blanco: #FFFFFF;
+  --gris-texto: #666666;
+  --verde: #4CAF50;
+  --naranja: #FF9800;
+  --violeta: #9C27B0;
+}
+
+@theme inline {
+  --color-granate: var(--granate);
+  --color-granate-claro: var(--granate-claro);
+  --color-fondo: var(--fondo);
+}
+
+body {
+  background-color: var(--fondo);
+  color: #171717;
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
