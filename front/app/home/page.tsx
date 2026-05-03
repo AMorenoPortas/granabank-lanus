@@ -146,38 +146,62 @@ export default function HomePage() {
           Últimos movimientos
         </p>
         <div className="flex flex-col gap-3 mt-4">
-          <MovimientoItem
-            nombre="Adobe"
-            descripcion="Pago de suscripción"
-            monto="$125"
-            color="#B946FF"
-            iconColor="#F3E4FF"
-            icono={<ArrowUpDown size={18} color="#B946FF" />}
-          />
-          <MovimientoItem
-            nombre="Ronaldo"
-            descripcion="Pago recibido"
-            monto="$95"
-            color="#7A1D2D"
-            iconColor="rgba(122, 29, 45, 0.20)"
-            icono={<ArrowDown size={18} color="#7A1D2D" />}
-          />
-          <MovimientoItem
-            nombre="Figma"
-            descripcion="Pago de suscripción"
-            monto="$125"
-            color="#B946FF"
-            iconColor="#F3E4FF"
-            icono={<ArrowUpDown size={18} color="#B946FF" />}
-          />
-          <MovimientoItem
-            nombre="Juan Perez"
-            descripcion="Pago enviado"
-            monto="$95"
-            color="#FF9800"
-            iconColor="#FEEAD4"
-            icono={<ArrowUp size={18} color="#EF9C55" />}
-          />
+          {[
+            {
+              id: 1,
+              nombre: "Adobe",
+              descripcion: "Pago de suscripción",
+              monto: "$125",
+              tipo: "suscripcion",
+              color: "#B946FF",
+              iconColor: "#F3E4FF",
+            },
+            {
+              id: 2,
+              nombre: "Ronaldo",
+              descripcion: "Pago recibido",
+              monto: "$95",
+              tipo: "recibido",
+              color: "#7A1D2D",
+              iconColor: "rgba(122, 29, 45, 0.20)",
+            },
+            {
+              id: 3,
+              nombre: "Figma",
+              descripcion: "Pago de suscripción",
+              monto: "$125",
+              tipo: "suscripcion",
+              color: "#B946FF",
+              iconColor: "#F3E4FF",
+            },
+            {
+              id: 4,
+              nombre: "Juan Perez",
+              descripcion: "Pago enviado",
+              monto: "$95",
+              tipo: "enviado",
+              color: "#EF9C55",
+              iconColor: "#FEEAD4",
+            },
+          ].map((mov) => (   // por cada movimiento en el array
+            <MovimientoItem  // renderiza el componente
+              key={mov.id}
+              nombre={mov.nombre}
+              descripcion={mov.descripcion}
+              monto={mov.monto}
+              color={mov.color}
+              iconColor={mov.iconColor}
+              icono={  //pasa el icono segun el tipo
+                mov.tipo === "recibido" ? (
+                  <ArrowDown size={18} color={mov.color} />
+                ) : mov.tipo === "enviado" ? (
+                  <ArrowUp size={18} color={mov.color} />
+                ) : (
+                  <ArrowUpDown size={18} color={mov.color} />
+                )
+              }
+            />
+          ))}
         </div>
       </div>
 

@@ -2,15 +2,72 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Home, FileText, LogOut, ArrowUpDown, ArrowDown, ArrowUp } from "lucide-react";
+import {
+  Search,
+  Home,
+  FileText,
+  LogOut,
+  ArrowUpDown,
+  ArrowDown,
+  ArrowUp,
+} from "lucide-react";
+import MovimientoItem from "../components/ui/MovimientosItem";
 
 const movimientosData = [
-  { id: 1, nombre: "Adobe", descripcion: "Pago de suscripción", monto: "$125", tipo: "suscripcion", color: "#B946FF", iconColor: "#F3E4FF" },
-  { id: 2, nombre: "José Suárez", descripcion: "Pago recibido", monto: "$95", tipo: "recibido", color: "#7A1D2D", iconColor: "rgba(122, 29, 45, 0.20)" },
-  { id: 3, nombre: "Figma", descripcion: "Pago de suscripción", monto: "$125", tipo: "suscripcion", color: "#B946FF", iconColor: "#F3E4FF" },
-  { id: 4, nombre: "Juan Rodríguez", descripcion: "Pago enviado", monto: "$95", tipo: "enviado", color: "#EF9C55", iconColor: "#FEEAD4" },
-  { id: 5, nombre: "Julio César", descripcion: "Pago recibido", monto: "$95", tipo: "recibido", color: "#7A1D2D", iconColor: "rgba(122, 29, 45, 0.20)" },
-  { id: 6, nombre: "Mariano Martinez", descripcion: "Pago enviado", monto: "$95", tipo: "enviado", color: "#EF9C55", iconColor: "#FEEAD4" },
+  {
+    id: 1,
+    nombre: "Adobe",
+    descripcion: "Pago de suscripción",
+    monto: "$125",
+    tipo: "suscripcion",
+    color: "#B946FF",
+    iconColor: "#F3E4FF",
+  },
+  {
+    id: 2,
+    nombre: "José Suárez",
+    descripcion: "Pago recibido",
+    monto: "$95",
+    tipo: "recibido",
+    color: "#7A1D2D",
+    iconColor: "rgba(122, 29, 45, 0.20)",
+  },
+  {
+    id: 3,
+    nombre: "Figma",
+    descripcion: "Pago de suscripción",
+    monto: "$125",
+    tipo: "suscripcion",
+    color: "#B946FF",
+    iconColor: "#F3E4FF",
+  },
+  {
+    id: 4,
+    nombre: "Juan Rodríguez",
+    descripcion: "Pago enviado",
+    monto: "$95",
+    tipo: "enviado",
+    color: "#EF9C55",
+    iconColor: "#FEEAD4",
+  },
+  {
+    id: 5,
+    nombre: "Julio César",
+    descripcion: "Pago recibido",
+    monto: "$95",
+    tipo: "recibido",
+    color: "#7A1D2D",
+    iconColor: "rgba(122, 29, 45, 0.20)",
+  },
+  {
+    id: 6,
+    nombre: "Mariano Martinez",
+    descripcion: "Pago enviado",
+    monto: "$95",
+    tipo: "enviado",
+    color: "#EF9C55",
+    iconColor: "#FEEAD4",
+  },
 ];
 
 function getIcono(tipo: string, color: string) {
@@ -108,7 +165,6 @@ export default function MovimientosPage() {
                   cursor: "pointer",
                   whiteSpace: "nowrap",
                   fontFamily: "Poppins, sans-serif",
-                  boxShadow: "0px 8px 30px 0px rgba(0,0,0,0.06)",
                   transition: "background-color 0.2s ease, color 0.2s ease",
                 }}
               >
@@ -129,44 +185,15 @@ export default function MovimientosPage() {
           </div>
         ) : (
           movimientosFiltrados.map((mov) => (
-            <div
+            <MovimientoItem
               key={mov.id}
-              className="flex items-center justify-between px-4"
-              style={{
-                backgroundColor: "#FFFFFF",
-                borderRadius: "16px",
-                height: "72px",
-                boxShadow: "0px 8px 30px 0px rgba(0,0,0,0.06)",
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  style={{
-                    backgroundColor: mov.iconColor,
-                    borderRadius: "12px",
-                    width: "44px",
-                    height: "44px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {getIcono(mov.tipo, mov.color)}
-                </div>
-                <div>
-                  <p style={{ fontSize: "14px", fontWeight: 500, color: "#334154", margin: 0 }}>
-                    {mov.nombre}
-                  </p>
-                  <p style={{ fontSize: "12px", fontWeight: 400, color: "#AAAAAA", margin: 0 }}>
-                    {mov.descripcion}
-                  </p>
-                </div>
-              </div>
-
-              <p style={{ fontSize: "14px", fontWeight: 600, color: mov.color, margin: 0 }}>
-                {mov.monto}
-              </p>
-            </div>
+              nombre={mov.nombre}
+              descripcion={mov.descripcion}
+              monto={mov.monto}
+              color={mov.color}
+              iconColor={mov.iconColor}
+              icono={getIcono(mov.tipo, mov.color)}
+            />
           ))
         )}
       </div>
@@ -182,7 +209,10 @@ export default function MovimientosPage() {
         <div>
           <FileText size={27} color="#7A1D2D" />
         </div>
-        <div style={{ cursor: "pointer" }} onClick={() => router.push("/login")}>
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={() => router.push("/login")}
+        >
           <LogOut size={27} color="#071529" />
         </div>
       </div>
