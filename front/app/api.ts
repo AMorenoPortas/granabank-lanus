@@ -15,3 +15,13 @@ export async function loginAPI(email: string, password: string) {
 
   return response.json();
 }
+
+export async function getMovimientosAPI(usuarioId: number) {
+  const response = await fetch(`http://localhost:3001/api/movimientos/${usuarioId}`);
+
+  if (!response.ok) {
+    throw new Error('Error al traer movimientos');
+  }
+
+  return response.json();
+}

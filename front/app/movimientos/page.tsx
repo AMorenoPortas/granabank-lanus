@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -12,63 +12,21 @@ import {
   ArrowUp,
 } from "lucide-react";
 import MovimientoItem from "../components/ui/MovimientosItem";
+import { getMovimientosAPI } from "../api";
 
-const movimientosData = [
-  {
-    id: 1,
-    nombre: "Adobe",
-    descripcion: "Pago de suscripción",
-    monto: "$125",
-    tipo: "suscripcion",
-    color: "#B946FF",
-    iconColor: "#F3E4FF",
-  },
-  {
-    id: 2,
-    nombre: "José Suárez",
-    descripcion: "Pago recibido",
-    monto: "$95",
-    tipo: "recibido",
-    color: "#7A1D2D",
-    iconColor: "rgba(122, 29, 45, 0.20)",
-  },
-  {
-    id: 3,
-    nombre: "Figma",
-    descripcion: "Pago de suscripción",
-    monto: "$125",
-    tipo: "suscripcion",
-    color: "#B946FF",
-    iconColor: "#F3E4FF",
-  },
-  {
-    id: 4,
-    nombre: "Juan Rodríguez",
-    descripcion: "Pago enviado",
-    monto: "$95",
-    tipo: "enviado",
-    color: "#EF9C55",
-    iconColor: "#FEEAD4",
-  },
-  {
-    id: 5,
-    nombre: "Julio César",
-    descripcion: "Pago recibido",
-    monto: "$95",
-    tipo: "recibido",
-    color: "#7A1D2D",
-    iconColor: "rgba(122, 29, 45, 0.20)",
-  },
-  {
-    id: 6,
-    nombre: "Mariano Martinez",
-    descripcion: "Pago enviado",
-    monto: "$95",
-    tipo: "enviado",
-    color: "#EF9C55",
-    iconColor: "#FEEAD4",
-  },
-];
+type Movimiento = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  monto: number;
+  tipo: string;
+};
+
+function getColor(tipo: string) {
+  if (tipo === "recibido") return { color: "#7A1D2D", iconColor: "rgba(122, 29, 45, 0.20)" };
+  if (tipo === "enviado") return { color: "#EF9C55", iconColor: "#FEEAD4" };
+  return { color: "#B946FF", iconColor: "#F3E4FF" };
+}
 
 function getIcono(tipo: string, color: string) {
   if (tipo === "recibido") return <ArrowDown size={18} color={color} />;
@@ -82,8 +40,21 @@ export default function MovimientosPage() {
   const router = useRouter();
   const [filtroActivo, setFiltroActivo] = useState<Filtro>("todos");
   const [busqueda, setBusqueda] = useState("");
+  const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const movimientosFiltrados = movimientosData.filter((mov) => {
+  useEffect(() => {
+    getMovimientosAPI(1)
+      .then((data) => {
+        setMovimientos(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const movimientosFiltrados = movimientos.filter((mov) => {
     const coincideBusqueda =
       mov.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       mov.descripcion.toLowerCase().includes(busqueda.toLowerCase());
@@ -114,7 +85,6 @@ export default function MovimientosPage() {
           Movimientos
         </p>
 
-        {/* Buscador */}
         <div
           className="flex items-center gap-3 mt-4 px-4"
           style={{
@@ -143,7 +113,6 @@ export default function MovimientosPage() {
           />
         </div>
 
-        {/* Filtros */}
         <div
           className="flex gap-2 mt-4 pb-2 hide-scrollbar"
           style={{ overflowX: "auto", maxWidth: "100%" }}
@@ -175,30 +144,33 @@ export default function MovimientosPage() {
         </div>
       </div>
 
-      {/* Lista de movimientos */}
       <div className="w-full max-w-sm px-6 mt-4 flex flex-col gap-3 pb-24">
-        {movimientosFiltrados.length === 0 ? (
+        {loading ? (
+          <p style={{ color: "#AAAAAA", fontSize: "14px", textAlign: "center", marginTop: "64px" }}>Cargando...</p>
+        ) : movimientosFiltrados.length === 0 ? (
           <div className="flex flex-col items-center justify-center mt-16 gap-3">
             <p style={{ color: "#AAAAAA", fontSize: "14px", fontWeight: 500 }}>
               No se encontraron movimientos
             </p>
           </div>
         ) : (
-          movimientosFiltrados.map((mov) => (
-            <MovimientoItem
-              key={mov.id}
-              nombre={mov.nombre}
-              descripcion={mov.descripcion}
-              monto={mov.monto}
-              color={mov.color}
-              iconColor={mov.iconColor}
-              icono={getIcono(mov.tipo, mov.color)}
-            />
-          ))
+          movimientosFiltrados.map((mov) => {
+            const { color, iconColor } = getColor(mov.tipo);
+            return (
+              <MovimientoItem
+                key={mov.id}
+                nombre={mov.nombre}
+                descripcion={mov.descripcion}
+                monto={`$${mov.monto}`}
+                color={color}
+                iconColor={iconColor}
+                icono={getIcono(mov.tipo, color)}
+              />
+            );
+          })
         )}
       </div>
 
-      {/* Barra de navegación */}
       <div
         className="w-full max-w-sm flex justify-center items-center gap-24 py-4 fixed bottom-0"
         style={{ backgroundColor: "#FFFFFF", borderTop: "1px solid #F0F0F0" }}
@@ -209,10 +181,7 @@ export default function MovimientosPage() {
         <div>
           <FileText size={27} color="#7A1D2D" />
         </div>
-        <div
-          style={{ cursor: "pointer" }}
-          onClick={() => router.push("/login")}
-        >
+        <div style={{ cursor: "pointer" }} onClick={() => router.push("/login")}>
           <LogOut size={27} color="#071529" />
         </div>
       </div>

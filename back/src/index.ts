@@ -45,6 +45,21 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+app.get('/api/movimientos/:usuarioId', async (req, res) => {
+  const { usuarioId } = req.params;
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM "Movimiento" WHERE "usuarioId" = $1 ORDER BY "createdAt" DESC',
+      [usuarioId]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.log('Error:', error);
+    res.status(500).json({ error: 'Error al traer movimientos' });
+  }
+});
+
 app.listen(3001, () => {
   console.log('Backend corriendo en puerto 3001');
 });
