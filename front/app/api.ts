@@ -1,5 +1,5 @@
 export async function loginAPI(email: string, password: string) {
-  const response = await fetch('http://localhost:3001/api/auth/login', {
+  const response = await fetch('/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
@@ -17,7 +17,7 @@ export async function loginAPI(email: string, password: string) {
 }
 
 export async function getMovimientosAPI(usuarioId: number) {
-  const response = await fetch(`http://localhost:3001/api/movimientos/${usuarioId}`);
+  const response = await fetch(`/api/movimientos/${usuarioId}`);
 
   if (!response.ok) {
     throw new Error('Error al traer movimientos');
