@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   Search,
   Bell,
@@ -12,9 +13,37 @@ import {
 } from "lucide-react";
 import MovimientoItem from "../components/ui/MovimientosItem";
 import { useRouter } from "next/navigation";
+import { getMovimientosAPI } from "../api";
+
+type Movimiento = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  monto: number;
+  tipo: string;
+};
+
+function getColor(tipo: string) {
+  if (tipo === "recibido") return { color: "#7A1D2D", iconColor: "rgba(122, 29, 45, 0.20)" };
+  if (tipo === "enviado") return { color: "#EF9C55", iconColor: "#FEEAD4" };
+  return { color: "#B946FF", iconColor: "#F3E4FF" };
+}
+
+function getIcono(tipo: string, color: string) {
+  if (tipo === "recibido") return <ArrowDown size={18} color={color} />;
+  if (tipo === "enviado") return <ArrowUp size={18} color={color} />;
+  return <ArrowUpDown size={18} color={color} />;
+}
 
 export default function HomePage() {
   const router = useRouter();
+  const [movimientos, setMovimientos] = useState<Movimiento[]>([]);
+
+  useEffect(() => {
+    getMovimientosAPI(1).then((data) => {
+      setMovimientos(data.slice(0, 4));
+    });
+  }, []);
 
   return (
     <main
@@ -32,8 +61,6 @@ export default function HomePage() {
               Granate
             </p>
           </div>
-
-          {/* LUPA */}
           <div className="flex gap-4 items-center">
             <div
               style={{ cursor: "pointer" }}
@@ -59,9 +86,7 @@ export default function HomePage() {
             <p style={{ fontSize: "14px", color: "#FFFFFF", fontWeight: 400 }}>
               Balance
             </p>
-            <div
-              style={{ position: "relative", width: "40px", height: "25px" }}
-            >
+            <div style={{ position: "relative", width: "40px", height: "25px" }}>
               <div
                 style={{
                   width: "25px",
@@ -95,15 +120,11 @@ export default function HomePage() {
                 height: "30px",
               }}
             >
-              <span
-                style={{ fontSize: "14px", fontWeight: 500, color: "#FFFFFF" }}
-              >
+              <span style={{ fontSize: "14px", fontWeight: 500, color: "#FFFFFF" }}>
                 USD
               </span>
             </div>
-            <span
-              style={{ fontSize: "22px", fontWeight: 500, color: "#FFFFFF" }}
-            >
+            <span style={{ fontSize: "22px", fontWeight: 500, color: "#FFFFFF" }}>
               978.85
             </span>
           </div>
@@ -125,14 +146,10 @@ export default function HomePage() {
               Soy Granate
             </p>
             <div className="flex flex-col items-end">
-              <p
-                style={{ fontSize: "10px", fontWeight: 400, color: "#FFFFFF" }}
-              >
+              <p style={{ fontSize: "10px", fontWeight: 400, color: "#FFFFFF" }}>
                 Exp. Date
               </p>
-              <p
-                style={{ fontSize: "13px", fontWeight: 400, color: "#FFFFFF" }}
-              >
+              <p style={{ fontSize: "13px", fontWeight: 400, color: "#FFFFFF" }}>
                 02/30
               </p>
             </div>
@@ -146,62 +163,20 @@ export default function HomePage() {
           Últimos movimientos
         </p>
         <div className="flex flex-col gap-3 mt-4">
-          {[
-            {
-              id: 1,
-              nombre: "Adobe",
-              descripcion: "Pago de suscripción",
-              monto: "$125",
-              tipo: "suscripcion",
-              color: "#B946FF",
-              iconColor: "#F3E4FF",
-            },
-            {
-              id: 2,
-              nombre: "Ronaldo",
-              descripcion: "Pago recibido",
-              monto: "$95",
-              tipo: "recibido",
-              color: "#7A1D2D",
-              iconColor: "rgba(122, 29, 45, 0.20)",
-            },
-            {
-              id: 3,
-              nombre: "Figma",
-              descripcion: "Pago de suscripción",
-              monto: "$125",
-              tipo: "suscripcion",
-              color: "#B946FF",
-              iconColor: "#F3E4FF",
-            },
-            {
-              id: 4,
-              nombre: "Juan Perez",
-              descripcion: "Pago enviado",
-              monto: "$95",
-              tipo: "enviado",
-              color: "#EF9C55",
-              iconColor: "#FEEAD4",
-            },
-          ].map((mov) => (   // por cada movimiento en el array
-            <MovimientoItem  // renderiza el componente
-              key={mov.id}
-              nombre={mov.nombre}
-              descripcion={mov.descripcion}
-              monto={mov.monto}
-              color={mov.color}
-              iconColor={mov.iconColor}
-              icono={  //pasa el icono segun el tipo
-                mov.tipo === "recibido" ? (
-                  <ArrowDown size={18} color={mov.color} />
-                ) : mov.tipo === "enviado" ? (
-                  <ArrowUp size={18} color={mov.color} />
-                ) : (
-                  <ArrowUpDown size={18} color={mov.color} />
-                )
-              }
-            />
-          ))}
+          {movimientos.map((mov) => {
+            const { color, iconColor } = getColor(mov.tipo);
+            return (
+              <MovimientoItem
+                key={mov.id}
+                nombre={mov.nombre}
+                descripcion={mov.descripcion}
+                monto={`$${mov.monto}`}
+                color={color}
+                iconColor={iconColor}
+                icono={getIcono(mov.tipo, color)}
+              />
+            );
+          })}
         </div>
       </div>
 
