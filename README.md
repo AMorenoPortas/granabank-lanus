@@ -38,23 +38,6 @@ Web app bancaria para el Club Atlético Lanús - Challenge técnico.
 - SweetAlert2: Feedback visual claro al usuario en login y errores.
 - Vercel: Deploy automatico conectado al repositorio de GitHub.
 
-## Estructura del proyecto
-
-granabank/
-├── front/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── auth/login/route.ts
-│   │   │   └── movimientos/[usuarioId]/route.ts
-│   │   ├── components/ui/
-│   │   │   └── MovimientosItem.tsx
-│   │   ├── home/page.tsx
-│   │   ├── login/page.tsx
-│   │   ├── movimientos/page.tsx
-│   │   └── api.ts
-│   └── prisma/
-│       └── schema.prisma
-
 ## Funcionalidades
 
 - Login con validacion de campos
