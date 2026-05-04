@@ -1,5 +1,4 @@
-Reemplazá todo el contenido del front/README.md con esto:
-markdown# GranaBank 🔴⚫
+# GranaBank 🔴⚫
 
 Web app bancaria para el Club Atlético Lanús - Challenge técnico.
 
@@ -13,46 +12,39 @@ Web app bancaria para el Club Atlético Lanús - Challenge técnico.
 ## ¿Cómo correr el proyecto?
 
 1. Cloná el repositorio:
-```bash
-git clone https://github.com/AMorenoPortas/granabank-lanus.git
-```
+   git clone https://github.com/AMorenoPortas/granabank-lanus.git
 
-2. Instalá las dependencias en la carpeta `front`:
-```bash
-cd front
-npm install
-```
+2. Instalá las dependencias en la carpeta front:
+   cd front
+   npm install
 
-3. Creá un archivo `.env` en `front/` con las variables:
-DATABASE_URL=tu_url_de_supabase
-DIRECT_URL=tu_direct_url_de_supabase
+3. Creá un archivo .env en front/ con las variables:
+   DATABASE_URL=tu_url_de_supabase
+   DIRECT_URL=tu_direct_url_de_supabase
 
 4. Generá el cliente de Prisma:
-```bash
-npx prisma generate
-```
+   npx prisma generate
 
 5. Corré el proyecto:
-```bash
-npm run dev
-```
+   npm run dev
 
-6. Abrí [http://localhost:3000](http://localhost:3000)
+6. Abrí http://localhost:3000
 
 ## Decisiones técnicas
 
-- **Next.js 16 + TypeScript:** Framework principal con App Router. Las API routes de Next.js reemplazan un backend separado, simplificando el deploy.
-- **Prisma ORM + Supabase (PostgreSQL):** Prisma para el manejo de la base de datos con tipado seguro. Supabase como proveedor de PostgreSQL gratuito y confiable.
-- **Tailwind CSS:** Estilos utilitarios para seguir el diseño de Figma de forma rápida y consistente.
-- **SweetAlert2:** Feedback visual claro al usuario en login y errores.
-- **Vercel:** Deploy automático conectado al repositorio de GitHub.
+- Next.js 16 + TypeScript: Framework principal con App Router. Las API routes de Next.js reemplazan un backend separado, simplificando el deploy.
+- Prisma ORM + Supabase (PostgreSQL): Prisma para el manejo de la base de datos con tipado seguro. Supabase como proveedor de PostgreSQL gratuito y confiable.
+- Tailwind CSS: Estilos utilitarios para seguir el diseño de Figma de forma rápida y consistente.
+- SweetAlert2: Feedback visual claro al usuario en login y errores.
+- Vercel: Deploy automático conectado al repositorio de GitHub.
 
 ## Estructura del proyecto
+
 front/
 ├── app/
 │   ├── api/
-│   │   ├── auth/login/route.ts      # POST /api/auth/login
-│   │   └── movimientos/[usuarioId]/ # GET /api/movimientos/:id
+│   │   ├── auth/login/route.ts
+│   │   └── movimientos/[usuarioId]/route.ts
 │   ├── components/ui/
 │   │   └── MovimientosItem.tsx
 │   ├── home/page.tsx
