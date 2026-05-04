@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Reemplazá todo el contenido del front/README.md con esto:
+markdown# GranaBank 🔴⚫
 
-## Getting Started
+Web app bancaria para el Club Atlético Lanús - Challenge técnico.
 
-First, run the development server:
+🔗 **Deploy:** [granabank-lanus.vercel.app](https://granabank-lanus.vercel.app)
 
+## Credenciales de prueba
+
+- **Email:** soygranate@clublanus.com
+- **Contraseña:** GRANATE1@
+
+## ¿Cómo correr el proyecto?
+
+1. Cloná el repositorio:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/AMorenoPortas/granabank-lanus.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Instalá las dependencias en la carpeta `front`:
+```bash
+cd front
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Creá un archivo `.env` en `front/` con las variables:
+DATABASE_URL=tu_url_de_supabase
+DIRECT_URL=tu_direct_url_de_supabase
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Generá el cliente de Prisma:
+```bash
+npx prisma generate
+```
 
-## Learn More
+5. Corré el proyecto:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+6. Abrí [http://localhost:3000](http://localhost:3000)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Decisiones técnicas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Next.js 16 + TypeScript:** Framework principal con App Router. Las API routes de Next.js reemplazan un backend separado, simplificando el deploy.
+- **Prisma ORM + Supabase (PostgreSQL):** Prisma para el manejo de la base de datos con tipado seguro. Supabase como proveedor de PostgreSQL gratuito y confiable.
+- **Tailwind CSS:** Estilos utilitarios para seguir el diseño de Figma de forma rápida y consistente.
+- **SweetAlert2:** Feedback visual claro al usuario en login y errores.
+- **Vercel:** Deploy automático conectado al repositorio de GitHub.
 
-## Deploy on Vercel
+## Estructura del proyecto
+front/
+├── app/
+│   ├── api/
+│   │   ├── auth/login/route.ts      # POST /api/auth/login
+│   │   └── movimientos/[usuarioId]/ # GET /api/movimientos/:id
+│   ├── components/ui/
+│   │   └── MovimientosItem.tsx
+│   ├── home/page.tsx
+│   ├── login/page.tsx
+│   ├── movimientos/page.tsx
+│   └── api.ts
+├── prisma/
+│   └── schema.prisma
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ¿Qué mejoraría con más tiempo?
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Autenticación con JWT y sesiones persistentes
+- Hasheo de contraseñas con bcrypt
+- Paginación en la lista de movimientos
+- Detalle de cada movimiento al hacer click
+- Animaciones de transición entre pantallas
+- Tests unitarios y de integración
+- Manejo de errores más robusto en el frontend
