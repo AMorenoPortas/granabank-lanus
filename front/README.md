@@ -65,7 +65,6 @@ front/
 ## ¿Qué mejoraría con más tiempo?
 
 - Autenticación con JWT y sesiones persistentes
-- Hasheo de contraseñas con bcrypt
 - Paginación en la lista de movimientos
 - Detalle de cada movimiento al hacer click
 - Animaciones de transición entre pantallas
