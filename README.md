@@ -40,3 +40,7 @@ npm run dev
 - Login con validación
 - Home con tarjeta y últimos movimientos
 - Lista de movimientos con buscador y filtros
+
+## Deploy
+
+Frontend: https://granabank-lanus.vercel.app
