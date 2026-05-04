@@ -1,7 +1,12 @@
 import express from 'express';
 import { Pool } from 'pg';
+import cors from 'cors'
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
+
 const pool = new Pool({
   user: 'postgres',
   password: 'postgres473',
@@ -10,10 +15,34 @@ const pool = new Pool({
   database: 'granabank',
 });
 
-app.use(express.json());
-
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend funcionando' });
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email y password requeridos' });
+  }
+
+  try {
+    const result = await pool.query(
+      'SELECT id, email FROM "Usuario" WHERE email = $1 AND password = $2',
+      [email, password]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    res.json({ usuario: result.rows[0] });
+  } catch (error) {
+    console.log('Error:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
 });
 
 app.listen(3001, () => {

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import { loginAPI } from "../api";
 
 export default function LoginPage() {
   const [recordarme, setRecordarme] = useState(false);
@@ -9,7 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (email === "" || password === "") {
       Swal.fire({
         icon: "error",
@@ -18,7 +19,27 @@ export default function LoginPage() {
       });
       return;
     }
-    router.push("/home");
+
+    try {
+      console.log("Enviando:", { email, password });
+      const usuario = await loginAPI(email, password);
+      console.log("Respuesta:", usuario);
+      
+      Swal.fire({
+        icon: "success",
+        text: "¡Bienvenido!",
+        confirmButtonColor: "#7A1D2D",
+      }).then(() => {
+        router.push("/home");
+      });
+    } catch (error: any) {
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        text: error?.message,
+        confirmButtonColor: "#7A1D2D",
+      });
+    }
   };
 
   return (
