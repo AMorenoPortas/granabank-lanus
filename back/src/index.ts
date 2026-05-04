@@ -1,27 +1,18 @@
 import express from 'express';
-import { Pool } from 'pg';
-import cors from 'cors'
+import cors from 'cors';
+import { PrismaClient } from '@prisma/client';
 
 const app = express();
+const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
-
-const pool = new Pool({
-  user: 'postgres',
-  password: 'postgres473',
-  host: 'localhost',
-  port: 5433,
-  database: 'granabank',
-});
 
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend funcionando' });
 });
 
 app.post('/api/auth/login', async (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -29,16 +20,15 @@ app.post('/api/auth/login', async (req, res) => {
   }
 
   try {
-    const result = await pool.query(
-      'SELECT id, email FROM "Usuario" WHERE email = $1 AND password = $2',
-      [email, password]
-    );
+    const usuario = await prisma.usuario.findFirst({
+      where: { email, password },
+    });
 
-    if (result.rows.length === 0) {
+    if (!usuario) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    res.json({ usuario: result.rows[0] });
+    res.json({ usuario: { id: usuario.id, email: usuario.email } });
   } catch (error) {
     console.log('Error:', error);
     res.status(500).json({ error: 'Error en el servidor' });
@@ -46,14 +36,15 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.get('/api/movimientos/:usuarioId', async (req, res) => {
-  const { usuarioId } = req.params;
+  const usuarioId = parseInt(req.params.usuarioId);
 
   try {
-    const result = await pool.query(
-      'SELECT * FROM "Movimiento" WHERE "usuarioId" = $1 ORDER BY "createdAt" DESC',
-      [usuarioId]
-    );
-    res.json(result.rows);
+    const movimientos = await prisma.movimiento.findMany({
+      where: { usuarioId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    res.json(movimientos);
   } catch (error) {
     console.log('Error:', error);
     res.status(500).json({ error: 'Error al traer movimientos' });
