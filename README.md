@@ -1,6 +1,6 @@
 # GranaBank 🔴⚫
 
-Web app bancaria para el Club Atlético Lanús - Challenge técnico.
+Web app bancaria para el Club Atlético Lanús 
 
 🔗 Deploy: https://granabank-lanus.vercel.app
 
